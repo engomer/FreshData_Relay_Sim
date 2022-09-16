@@ -46,15 +46,9 @@ for ii = 1:length(t)
 
     if ~isempty(canTransmit)
         QueueArray(canTransmit,:) = circshift(QueueArray(canTransmit,:),1,2);
-        QueueArray(canTransmit,1) = Priority_Weight*Node_Priority(canTransmit);
+        QueueArray(canTransmit,1) = 0.9*Node_Priority(canTransmit);
     end
     
-
-    QueueArray(QueueArray~=0) = QueueArray(QueueArray~=0) + Age_Weight*0.1;
-    Node_Age = Node_Age + 1;
-    AgeArray(:,ii) = Age;
-    Age = Age + 0.1;
-
     if mod(ii,ceil(Days*length(t)/(Days*satPassNum)))==0
         txNum = txNum+1;
         QueueLCArray = sortrows([QueueArray(:,1), (1:numOfNodes)'],-1);
@@ -69,6 +63,10 @@ for ii = 1:length(t)
         QueueArray(RelayTxIdx,:) = circshift(QueueArray(RelayTxIdx,:),-1,2);
         
     end
+    QueueArray(QueueArray~=0) = QueueArray(QueueArray~=0) + Age_Weight*0.1;
+    Node_Age = Node_Age + 1;
+    AgeArray(:,ii) = Age;
+    Age = Age + 0.1;
 end
 
 
