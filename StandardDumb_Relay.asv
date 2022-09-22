@@ -1,25 +1,19 @@
-%Her passte 1 transmission
-
-
+clear;clc;
 format long
+tic
 
-
-% numberOfPasses = [2 4 10 15]; %number of satellite passes
-% satPassNum = numberOfPasses(3); %selected sat pass case
-% Days = 1; %simulation day duration
-% numOfNodes = 10; %number of nodes
-% queueLength = 25; %queue length
-% RelayNodeCapacity = 7; %relay node capacity
-% t = 0.1:0.1:Days*24*60*60;
-
-Priority_Weight = 0.3;
-Age_Weight = 1-Priority_Weight;
+numberOfPasses = [2 4 10 15]; %number of satellite passes
+satPassNum = numberOfPasses(1); %selected sat pass case
+Days = 1; %simulation day duration
+numOfNodes = 10; %number of nodes
+queueLength = 25; %queue length
+RelayNodeCapacity = 7; %relay node capacity
+t = 0.1:0.1:Days*24*60*60;
 
 Node_Age = randi(3900,numOfNodes,1);
 Age = zeros(numOfNodes,1);
 AgeArray = zeros(numOfNodes,length(t));
-Node_Priority = randi(8,numOfNodes,1) + 1;
-QueueArray = zeros(numOfNodes,queueLength);
+QueueArray = zeros(numOfNodes*queueLength,2);
 channel_Sel = randi(7,numOfNodes,1) + 1;
 numOfTx = zeros(numOfNodes,1);
 numOfRelayTx = zeros(numOfNodes,1);
@@ -46,32 +40,33 @@ for ii = 1:length(t)
     % Relay Part
 
     if ~isempty(canTransmit)
-        QueueArray(canTransmit,:) = circshift(QueueArray(canTransmit,:),1,2);
-        QueueArray(canTransmit,1) = Priority_Weight*Node_Priority(canTransmit);
+        QueueArray = circshift(QueueArray,length(canTransmit));
+        QueueArray(1:length(canTransmit),2) = canTransmit;
+        QueueArray(1:length(canTransmit),1) = 0.001;  
     end
     
 
-    QueueArray(QueueArray~=0) = QueueArray(QueueArray~=0) + Age_Weight*0.1;
+    QueueArray(QueueArray(:,1)~=0,1) = QueueArray(QueueArray(:,1)~=0,1) + 0.1;
     Node_Age = Node_Age + 1;
     AgeArray(:,ii) = Age;
     Age = Age + 0.1;
 
     if mod(ii,ceil(Days*length(t)/(Days*satPassNum)))==0
         txNum = txNum+1;
-        QueueLCArray = sortrows([QueueArray(:,1), (1:numOfNodes)'],-1);
-        RelayTxIdx = QueueLCArray(1:RelayNodeCapacity,2);
+        SatQueueArray = nonzeros(QueueArray);
+        SatQueueArray = [SatQueueArray(1:end/2,1) SatQueueArray(end/2+1:end,1)];
+        RelayTxIdx = SatQueueArray(end-RelayNodeCapacity+1:end,2);
 
         numOfRelayTx(RelayTxIdx,1) = numOfRelayTx(RelayTxIdx,1) + 1;
         
         total_Age(RelayTxIdx,txNum) = Age(RelayTxIdx,1);
-        Age(RelayTxIdx) = QueueArray(RelayTxIdx,1)-Priority_Weight*Node_Priority(RelayTxIdx,1);
+        Age(RelayTxIdx) = SatQueueArray(end-RelayNodeCapacity+1:end,1);
         
-        QueueArray(RelayTxIdx,1) = 0;
-        QueueArray(RelayTxIdx,:) = circshift(QueueArray(RelayTxIdx,:),-1,2);
+        QueueArray(length(SatQueueArray)-RelayNodeCapacity+1:length(SatQueueArray),:) = 0;
         
     end
 end
+meanNodeAge = mean(AgeArray,2)
+meanAge
 
-meanNodeAge = mean(AgeArray,2);
-meanAge = mean(AgeArray,"all");
-
+toc
