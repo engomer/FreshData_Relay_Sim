@@ -5,7 +5,7 @@ format long
 
 
 % numberOfPasses = [2 4 10 15]; %number of satellite passes
-% satPassNum = numberOfPasses(3); %selected sat pass case
+% satPassNum = numberOfPasses(1); %selected sat pass case
 % Days = 1; %simulation day duration
 % numOfNodes = 10; %number of nodes
 % queueLength = 25; %queue length
@@ -31,7 +31,7 @@ oneDayt = 24*60*60;
 txNum = 1;
 for ii = 1:length(t)
     
-    mayTransmitIdx = mod(Node_Age,65) == 0;
+    mayTransmitIdx = mod(Node_Age,300) == 0;
     mayTransmit = find(mayTransmitIdx==1);
     mayTransmitSize = size(mayTransmit);
     
@@ -71,7 +71,8 @@ for ii = 1:length(t)
         
     end
 end
-
+minmeanPeakAge_PerNode = min(max(AgeArray,[],2));
+peakAge = max(AgeArray,[],"all");
 meanNodeAge = mean(AgeArray,2);
 meanAge = mean(AgeArray,"all");
 
