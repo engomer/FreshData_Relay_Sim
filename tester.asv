@@ -10,7 +10,6 @@ Nodes = [19 51 99];
 queueLength = 25; %queue length
 RelayNodeCapacity = 7; %relay node capacity
 t = 0.1:0.1:Days*24*60*60;
-figure
 for caseNum = 1:3
     satPassNum = numberOfPasses(caseNum); %selected sat pass case
     numOfNodes = Nodes(caseNum); %number of nodes
@@ -30,74 +29,62 @@ toc
 %%
 figure
 subplot(3,2,1);
-stem(length(St_Peak_Age_Array{1,1}),St_Peak_Age_Array{1,1}); 
+stem(1:length(SPeak_Age_Array{1,1}),St_Peak_Age_Array{1,1}); 
 hold on
-stem(length(Peak_Age_Array{1,1}),Peak_Age_Array{1,1}); 
+stem(1:length(Peak_Age_Array{1,1}),Peak_Age_Array{1,1}); 
 xlabel("Node Index");
 ylabel("Peak Age");
 grid on
 legend(["Standard Relay", "FreshData Relay"],"Location","northeast");
 title(sprintf("%d Satellite Passes Per day for %d nodes",numberOfPasses(1),Nodes(1)));
 
-subplot(3,2,3);
-stem(length(St_Peak_Age_Array{2,1}),St_Peak_Age_Array{2,1}); 
+subplot(3,2,2);
+stem(1:length(St_Peak_Age_Array{1,1}),St_Peak_Age_Array{1,2}-St_Peak_Age_Array{1,3}); 
 hold on
-stem(length(Peak_Age_Array{2,1}),Peak_Age_Array{2,1}); 
+stem(1:length(Peak_Age_Array{1,1}),Peak_Age_Array{1,2}-Peak_Age_Array{1,3}); 
+xlabel("Node Index");
+ylabel("Number of Lost Packets");
+grid on
+legend(["Standard Relay", "FreshData Relay"],"Location","northeast");
+title(sprintf("%d Satellite Passes Per day for %d nodes",numberOfPasses(1),Nodes(1)));
+
+subplot(3,2,3);
+stem(1:length(St_Peak_Age_Array{2,1}),St_Peak_Age_Array{2,1}); 
+hold on
+stem(1:length(Peak_Age_Array{2,1}),Peak_Age_Array{2,1}); 
 xlabel("Node Index");
 ylabel("Peak Age");
 grid on
 legend(["Standard Relay", "FreshData Relay"],"Location","northeast");
 title(sprintf("%d Satellite Passes Per day for %d nodes",numberOfPasses(2),Nodes(2)));
 
-subplot(3,2,5);
-stem(length(St_Peak_Age_Array{3,1}),St_Peak_Age_Array{3,1}); 
+subplot(3,2,4);
+stem(1:length(St_Peak_Age_Array{2,1}),St_Peak_Age_Array{2,2}-St_Peak_Age_Array{2,3}); 
 hold on
-stem(length(Peak_Age_Array{3,1}),Peak_Age_Array{3,1}); 
+stem(1:length(Peak_Age_Array{2,1}),Peak_Age_Array{2,2}-Peak_Age_Array{2,3}); 
+xlabel("Node Index");
+ylabel("Number of Lost Packets");
+grid on
+legend(["Standard Relay", "FreshData Relay"],"Location","northeast");
+title(sprintf("%d Satellite Passes Per day for %d nodes",numberOfPasses(2),Nodes(2)));
+
+subplot(3,2,5);
+stem(1:length(St_Peak_Age_Array{3,1}),St_Peak_Age_Array{3,1}); 
+hold on
+stem(1:length(Peak_Age_Array{3,1}),Peak_Age_Array{3,1}); 
 xlabel("Node Index");
 ylabel("Peak Age");
 grid on
 legend(["Standard Relay", "FreshData Relay"],"Location","northeast");
 title(sprintf("%d Satellite Passes Per day for %d nodes",numberOfPasses(3),Nodes(3)));
 
+subplot(3,2,6);
+stem(1:length(St_Peak_Age_Array{3,1}),St_Peak_Age_Array{3,2}-St_Peak_Age_Array{3,3}); 
+hold on
+stem(1:length(Peak_Age_Array{3,1}),Peak_Age_Array{3,2}-Peak_Age_Array{3,3}); 
+xlabel("Node Index");
+ylabel("Number of Lost Packets");
+grid on
+legend(["Standard Relay", "FreshData Relay"],"Location","northeast");
+title(sprintf("%d Satellite Passes Per day for %d nodes",numberOfPasses(3),Nodes(3)));
 
-%% 
-% figure
-% subplot(2,2,1);
-% plot(NodeNum,St_Mean_Age_Array(:,1), 'b--*'); 
-% hold on
-% plot(NodeNum,Mean_Age_Array(:,1), 'g--*');
-% xlabel("Number of Nodes");
-% ylabel("Peak Age");
-% grid on
-% legend(["Standard Relay", "FreshData Relay"],"Location","east");
-% title(sprintf("%d Satellite Passes Per day for %d days",2,3));
-% 
-% subplot(2,2,2);
-% plot(NodeNum,St_Mean_Age_Array(:,2), 'b--*'); 
-% hold on
-% plot(NodeNum,Mean_Age_Array(:,2), 'g--*');
-% xlabel("Number of Nodes");
-% ylabel("Peak Age");
-% grid on
-% legend(["Standard Relay", "FreshData Relay"],"Location","east");
-% title(sprintf("%d Satellite Passes Per day for %d days",4,3));
-% 
-% subplot(2,2,3);
-% plot(NodeNum,St_Mean_Age_Array(:,3), 'b--*'); 
-% hold on
-% plot(NodeNum,Mean_Age_Array(:,3), 'g--*');
-% xlabel("Number of Nodes");
-% ylabel("Peak Age");
-% grid on
-% legend(["Standard Relay", "FreshData Relay"],"Location","east");
-% title(sprintf("%d Satellite Passes Per day for %d days",10,3));
-% 
-% subplot(2,2,4);
-% plot(NodeNum,St_Mean_Age_Array(:,4), 'b--*'); 
-% hold on
-% plot(NodeNum,Mean_Age_Array(:,4), 'g--*');
-% xlabel("Number of Nodes");
-% ylabel("Peak Age");
-% grid on
-% legend(["Standard Relay", "FreshData Relay"],"Location","east");
-% title(sprintf("%d Satellite Passes Per day for %d days",15,3));
